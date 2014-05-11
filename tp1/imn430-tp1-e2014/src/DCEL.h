@@ -10,7 +10,7 @@
 #define IMN430_TP1_DCEL_h
 
 //---- Namespace to avoid name clash
-namespace DECEL{
+namespace DCEL{
     /*
         Edges are oriented counterclockwise inside each face
         Because an edge may border two faces an edge is replace by two half edge
@@ -24,14 +24,27 @@ namespace DECEL{
     typedef edge half_edge;
     
     class vertex{
+    public:
+        //---- Members
+        half_edge* rep;
+    };
+    
+    class face{
+    public:
         half_edge* rep;
     };
     
     class edge{
+    public:
+        //---- Constructors
+        edge(half_edge* oprev = nullptr, half_edge* onext = nullptr) :
+            prev(oprev), next(onext){
+        }
+        
+        //---- Members
         half_edge* prev;
         half_edge* next;
-        edge* twin;
-        
+        half_edge* twin;
         vertex* tail;
         face* left;
     };
