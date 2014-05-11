@@ -38,7 +38,7 @@ namespace DCEL{
     public:
         //---- Constructors
         edge(half_edge* oprev = nullptr, half_edge* onext = nullptr) :
-            prev(oprev), next(onext){
+            prev(oprev), next(onext), twin(nullptr), vertex(nullptr), face(nullptr){
         }
         
         //---- Members
