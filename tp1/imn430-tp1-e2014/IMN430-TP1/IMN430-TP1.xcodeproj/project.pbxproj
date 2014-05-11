@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		92616B2A192007A60084B997 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92616B29192007A60084B997 /* main.cpp */; };
 		92616B2C192007A60084B997 /* IMN430_TP1.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 92616B2B192007A60084B997 /* IMN430_TP1.1 */; };
+		92616B37192007FF0084B997 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92616B36192007FF0084B997 /* main.cpp */; };
+		92616B3A1920086B0084B997 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92616B381920086B0084B997 /* GLUT.framework */; };
+		92616B3B1920086B0084B997 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92616B391920086B0084B997 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,8 +28,12 @@
 
 /* Begin PBXFileReference section */
 		92616B26192007A50084B997 /* IMN430-TP1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "IMN430-TP1"; sourceTree = BUILT_PRODUCTS_DIR; };
-		92616B29192007A60084B997 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		92616B2B192007A60084B997 /* IMN430_TP1.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = IMN430_TP1.1; sourceTree = "<group>"; };
+		92616B33192007FF0084B997 /* 7. Voronoi Diagrams The Post Office Problem.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "7. Voronoi Diagrams The Post Office Problem.pdf"; sourceTree = "<group>"; };
+		92616B34192007FF0084B997 /* imn430-tp1-e2014.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "imn430-tp1-e2014.pdf"; sourceTree = "<group>"; };
+		92616B36192007FF0084B997 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		92616B381920086B0084B997 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		92616B391920086B0084B997 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +41,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92616B3A1920086B0084B997 /* GLUT.framework in Frameworks */,
+				92616B3B1920086B0084B997 /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,6 +52,8 @@
 		92616B1D192007A40084B997 = {
 			isa = PBXGroup;
 			children = (
+				92616B381920086B0084B997 /* GLUT.framework */,
+				92616B391920086B0084B997 /* OpenGL.framework */,
 				92616B28192007A50084B997 /* IMN430-TP1 */,
 				92616B27192007A50084B997 /* Products */,
 			);
@@ -60,10 +70,30 @@
 		92616B28192007A50084B997 /* IMN430-TP1 */ = {
 			isa = PBXGroup;
 			children = (
-				92616B29192007A60084B997 /* main.cpp */,
+				92616B32192007FF0084B997 /* ressources */,
+				92616B35192007FF0084B997 /* src */,
 				92616B2B192007A60084B997 /* IMN430_TP1.1 */,
 			);
 			path = "IMN430-TP1";
+			sourceTree = "<group>";
+		};
+		92616B32192007FF0084B997 /* ressources */ = {
+			isa = PBXGroup;
+			children = (
+				92616B33192007FF0084B997 /* 7. Voronoi Diagrams The Post Office Problem.pdf */,
+				92616B34192007FF0084B997 /* imn430-tp1-e2014.pdf */,
+			);
+			name = ressources;
+			path = ../../ressources;
+			sourceTree = "<group>";
+		};
+		92616B35192007FF0084B997 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				92616B36192007FF0084B997 /* main.cpp */,
+			);
+			name = src;
+			path = ../../src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -117,7 +147,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92616B2A192007A60084B997 /* main.cpp in Sources */,
+				92616B37192007FF0084B997 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
