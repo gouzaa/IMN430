@@ -19,6 +19,8 @@
 #include <algorithm>
 #include <time.h>
 
+#include "DCEL.h"
+
 #define GLUT_DISABLE_ATEXIT_HACK
 
 GLint windowWidth = 500;
