@@ -14,8 +14,8 @@
 //---- Namespace to avoid name clash
 namespace DCEL{
     /*
-        Edges are oriented counterclockwise inside each face
-        Because an edge may border two faces an edge is replace by two half edge
+        Edges are oriented counterclockwise inside each region
+        Because an edge may border two regions an edge is replace by two half edge
      */
     
     
@@ -29,22 +29,41 @@ namespace DCEL{
     public:
         //---- Constructors
         Vertex(HalfEdge* oedge = nullptr) :
-            edge(oedge){
+            edge(oedge)
+        ,   x(0)
+        ,   y(0)
+        ,   z(0)
+        {
+        }
+        
+        Vertex(int xPos, int yPos, HalfEdge* oedge = nullptr, int zPos = 0) :
+            edge(oedge)
+        ,   x(xPos)
+        ,   y(yPos)
+        ,   z(zPos)
+        {
         }
         
         //---- Members
         HalfEdge* edge;
+        
+        int x;
+        int y;
+        int z;
     };
     
-    class Face{
+    class Region{
     public:
         //---- Constructors
-        Face(HalfEdge* obound = nullptr) :
+        Region(HalfEdge* obound = nullptr) :
             bound(obound){
         }
         
         //---- Members
         HalfEdge* bound;
+        
+        //TODO: If we need to add hole to a region it will be here
+        //std::List<HalfEdge*> holes; ou quelque chose comme ca
     };
     
     class Edge{
@@ -79,7 +98,7 @@ namespace DCEL{
         HalfEdge* next;
         HalfEdge* twin;
         Vertex*   tail;//Or origin
-        Face* left;
+        Region*   left;
     };
 }
 

@@ -18,10 +18,14 @@
 #include <math.h>
 #include <algorithm>
 #include <time.h>
+#include <set>
 
+#include "utils.h"
 #include "DCEL.h"
 
 #define GLUT_DISABLE_ATEXIT_HACK
+
+using namespace UTILS;
 
 GLint windowWidth = 500;
 GLint windowHeight = 500;
@@ -33,6 +37,14 @@ void mouseButton(int button, int state, int x, int y);
 void drawControlPoints();
 void drawVoronoiDiagram();
 void drawEdges();
+
+struct compareSite {
+    bool operator() (const Site& lhs, const Site& rhs) const
+    {return lhs.y<rhs.y;}
+};
+
+//FIXME: devrait on placer cette variable dans le .h?
+std::set<Site, compareSite> vertices;
 
 int main(int argc, char * argv[])
 {
@@ -72,9 +84,10 @@ void mouseButton( int button, int state, int x, int y )
         GLfloat pixels[3];
         glReadPixels(x, windowHeight - y, 1, 1, GL_RGB, GL_FLOAT, &pixels);
         
-        if(pixels[0] != 0.0 || pixels[1] != 0.0 || pixels[2] != 0.0)
+//        if(pixels[0] != 0.0 || pixels[1] != 0.0 || pixels[2] != 0.0)
         {
-            return;
+            vertices.insert(Site(x, y));
+            //return;
         }
 	}
 	glutPostRedisplay();
@@ -92,6 +105,10 @@ void display (void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 	
+    drawControlPoints();
+    drawVoronoiDiagram();
+    drawEdges();
+
     glFlush();
 	glutSwapBuffers();
 }
@@ -102,4 +119,35 @@ void reshape (int m_width, int m_height)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
+}
+
+//FIXME: demander a Olivier si nous avons droit de modifier sont main ou si l'on doit mettre les fct non implanter dans nos propres fichiers
+void drawControlPoints()
+{
+    glPushMatrix();
+    glLoadIdentity();
+    
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glPointSize(5);
+    
+    glBegin(GL_POINTS);
+
+        for(auto iter = vertices.begin(); iter != vertices.end(); iter++)
+        {
+            glVertex2i(iter->x - windowWidth/2, -iter->y + windowHeight/2);
+        }
+    
+    glEnd();
+    
+    glPopMatrix();
+}
+
+void drawVoronoiDiagram()
+{
+    //TODO: a implanter
+}
+
+void drawEdges()
+{
+    //TODO: a implanter
 }
