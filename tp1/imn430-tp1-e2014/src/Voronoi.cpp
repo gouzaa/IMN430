@@ -75,16 +75,29 @@ void VoronoiDiagram::fortuneAlgorithm(const std::set<DCEL::Vertex*, DCEL::Vertex
         
         //Handle event
         if(event->isSiteEvent()){
-//            insert(event->point);
+            insert(event->point);
         }
         else{
-//            remove(event);
+           remove(event);
         }
         
         delete event;
     }
     
     //return edges;
+}
+
+void VoronoiDiagram::insert(DCEL::Vertex* point){
+    if(root.empty()){
+        root.insert(point);
+        return;
+    }
+    
+    //Determiner si root est une leaf...
+}
+
+void VoronoiDiagram::remove(VoronoiDiagram::VoronoiEvent* event){
+    
 }
 
 

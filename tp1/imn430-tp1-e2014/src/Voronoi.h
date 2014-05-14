@@ -24,15 +24,12 @@ private:
     class VoronoiEvent
     {
     protected:
-        VoronoiEvent(DCEL::Vertex* pt = nullptr)
+        VoronoiEvent(DCEL::Vertex* pt)
             : point(pt){
         }
     public:
         virtual ~VoronoiEvent(){
-            if(point){
-                delete point;
-                point = nullptr;
-            }
+            delete point;
         }
         
         virtual bool isSiteEvent() = 0;
@@ -72,7 +69,12 @@ public:
     void fortuneAlgorithm(const std::set<DCEL::Vertex*, DCEL::Vertex::Compare>& sites);
     
 private:
-    std::priority_queue<VoronoiEvent*> mEventQueue;
+    //---- Event handlers
+    void insert(DCEL::Vertex* point);
+    void remove(VoronoiDiagram::VoronoiEvent* event);
+    
+    //---- Members
+    std::priority_queue<VoronoiEvent*> mEventQueue;//Handle events base on it's y coord
     double line;
     vector<DCEL::Vertex*> vertices;
     vector<DCEL::Edge*> edges;
