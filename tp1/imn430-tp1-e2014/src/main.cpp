@@ -128,7 +128,7 @@ void drawControlPoints()
     
     glBegin(GL_POINTS);
 
-        for(auto iter = sites.begin(); iter != sites.end(); iter++)
+        for(auto iter = sites.begin(); iter != sites.end(); ++iter)
         {
             glVertex2i(iter->x - windowWidth/2, -iter->y + windowHeight/2);
         }
