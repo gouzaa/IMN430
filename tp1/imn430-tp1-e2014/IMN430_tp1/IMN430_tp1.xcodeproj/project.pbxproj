@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		922E3CD51922F699007754AF /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 922E3CD41922F699007754AF /* main.cpp */; };
 		922E3CD71922F699007754AF /* IMN430_tp1.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 922E3CD61922F699007754AF /* IMN430_tp1.1 */; };
+		922E3CEB1922F7F6007754AF /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922E3CE91922F7F6007754AF /* GLUT.framework */; };
+		922E3CEC1922F7F6007754AF /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 922E3CEA1922F7F6007754AF /* OpenGL.framework */; };
+		922E3CF41922F802007754AF /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 922E3CF21922F802007754AF /* main.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,8 +28,14 @@
 
 /* Begin PBXFileReference section */
 		922E3CD11922F699007754AF /* IMN430_tp1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = IMN430_tp1; sourceTree = BUILT_PRODUCTS_DIR; };
-		922E3CD41922F699007754AF /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		922E3CD61922F699007754AF /* IMN430_tp1.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = IMN430_tp1.1; sourceTree = "<group>"; };
+		922E3CE91922F7F6007754AF /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		922E3CEA1922F7F6007754AF /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		922E3CEE1922F802007754AF /* 7. Voronoi Diagrams The Post Office Problem.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "7. Voronoi Diagrams The Post Office Problem.pdf"; sourceTree = "<group>"; };
+		922E3CEF1922F802007754AF /* imn430-tp1-e2014.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "imn430-tp1-e2014.pdf"; sourceTree = "<group>"; };
+		922E3CF11922F802007754AF /* DCEL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCEL.h; sourceTree = "<group>"; };
+		922E3CF21922F802007754AF /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		922E3CF31922F802007754AF /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +43,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				922E3CEB1922F7F6007754AF /* GLUT.framework in Frameworks */,
+				922E3CEC1922F7F6007754AF /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,6 +54,8 @@
 		922E3CC81922F698007754AF = {
 			isa = PBXGroup;
 			children = (
+				922E3CE91922F7F6007754AF /* GLUT.framework */,
+				922E3CEA1922F7F6007754AF /* OpenGL.framework */,
 				922E3CD31922F699007754AF /* IMN430_tp1 */,
 				922E3CD21922F699007754AF /* Products */,
 			);
@@ -60,10 +72,32 @@
 		922E3CD31922F699007754AF /* IMN430_tp1 */ = {
 			isa = PBXGroup;
 			children = (
-				922E3CD41922F699007754AF /* main.cpp */,
+				922E3CED1922F802007754AF /* ressources */,
+				922E3CF01922F802007754AF /* src */,
 				922E3CD61922F699007754AF /* IMN430_tp1.1 */,
 			);
 			path = IMN430_tp1;
+			sourceTree = "<group>";
+		};
+		922E3CED1922F802007754AF /* ressources */ = {
+			isa = PBXGroup;
+			children = (
+				922E3CEE1922F802007754AF /* 7. Voronoi Diagrams The Post Office Problem.pdf */,
+				922E3CEF1922F802007754AF /* imn430-tp1-e2014.pdf */,
+			);
+			name = ressources;
+			path = ../../ressources;
+			sourceTree = "<group>";
+		};
+		922E3CF01922F802007754AF /* src */ = {
+			isa = PBXGroup;
+			children = (
+				922E3CF11922F802007754AF /* DCEL.h */,
+				922E3CF21922F802007754AF /* main.cpp */,
+				922E3CF31922F802007754AF /* utils.h */,
+			);
+			name = src;
+			path = ../../src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -117,7 +151,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				922E3CD51922F699007754AF /* main.cpp in Sources */,
+				922E3CF41922F802007754AF /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,6 +261,7 @@
 				922E3CDC1922F699007754AF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
