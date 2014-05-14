@@ -63,7 +63,7 @@ private:
 public:
     VoronoiDiagram(std::set<UTILS::Site, compareSite> site);
     
-    void fortureAlgorithm();
+    void fortuneAlgorithm();
     
 protected:
     void initEventQueue( std::set<UTILS::Site, compareSite> site );

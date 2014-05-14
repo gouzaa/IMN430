@@ -61,7 +61,7 @@ VoronoiDiagram::VoronoiDiagram( set<Site, compareSite> site )
     }
 }
 
-void VoronoiDiagram::fortureAlgorithm()
+void VoronoiDiagram::fortuneAlgorithm()
 {
     //TODO: a implanter de la sorte
     while(!mEventQueue.empty())
