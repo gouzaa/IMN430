@@ -17,11 +17,16 @@ namespace UTILS{
           x(xPos)
         , y(yPos)
         {}
-        
+
         int x;
         int y;
         
     }; // class Site
 }; //namespace UTILS
+
+struct compareSite {
+    bool operator() (const UTILS::Site& lhs, const UTILS::Site& rhs) const
+    {return lhs.y<rhs.y;}
+};
 
 #endif

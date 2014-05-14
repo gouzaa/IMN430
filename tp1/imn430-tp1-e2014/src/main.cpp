@@ -22,6 +22,7 @@
 
 #include "utils.h"
 #include "DCEL.h"
+#include "Voronoi.h"
 
 #define GLUT_DISABLE_ATEXIT_HACK
 
@@ -38,13 +39,8 @@ void drawControlPoints();
 void drawVoronoiDiagram();
 void drawEdges();
 
-struct compareSite {
-    bool operator() (const Site& lhs, const Site& rhs) const
-    {return lhs.y<rhs.y;}
-};
-
 //FIXME: devrait on placer cette variable dans le .h?
-std::set<Site, compareSite> vertices;
+std::set<Site, compareSite> sites;
 
 int main(int argc, char * argv[])
 {
@@ -86,7 +82,7 @@ void mouseButton( int button, int state, int x, int y )
         
 //        if(pixels[0] != 0.0 || pixels[1] != 0.0 || pixels[2] != 0.0)
         {
-            vertices.insert(Site(x, y));
+            sites.insert(Site(x, y));
             //return;
         }
 	}
@@ -106,6 +102,7 @@ void display (void)
     glLoadIdentity();
 	
     drawControlPoints();
+    VoronoiDiagram diagram(sites);
     drawVoronoiDiagram();
     drawEdges();
 
@@ -121,7 +118,6 @@ void reshape (int m_width, int m_height)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-//FIXME: demander a Olivier si nous avons droit de modifier sont main ou si l'on doit mettre les fct non implanter dans nos propres fichiers
 void drawControlPoints()
 {
     glPushMatrix();
@@ -132,7 +128,7 @@ void drawControlPoints()
     
     glBegin(GL_POINTS);
 
-        for(auto iter = vertices.begin(); iter != vertices.end(); iter++)
+        for(auto iter = sites.begin(); iter != sites.end(); iter++)
         {
             glVertex2i(iter->x - windowWidth/2, -iter->y + windowHeight/2);
         }
