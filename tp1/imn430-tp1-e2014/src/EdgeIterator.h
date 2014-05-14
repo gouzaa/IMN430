@@ -3,53 +3,49 @@
 //  IMN430_tp1
 //
 //  Created by Steven Aubertin on 2014-05-13.
-//  Copyright (c) 2014 Steven Aubertin. All rights reserved.
 //
 
 #ifndef IMN430_tp1_EdgeIterator_h
 #define IMN430_tp1_EdgeIterator_h
 
+#include "Edge.h"
+
 namespace DCEL {
-    template<class T, class EdgeT>
+    /*
+        Base Iterator Class for edges in a DCEL
+     */
     class EdgeIterator{
     public:
-        //---- Typedefs
-        typedef EdgeT edge_type;
-        typedef T value_type;
-        typedef EdgeIterator<edge_type, value_type> iterator_type;
-        
         //---- Predicates
         inline bool hasNext()const{
             return next != nullptr;
         }
-        inline bool isStart(const edge_type* const edge)const{
+        inline bool isStart(const Edge* const edge)const{
             return edge == start;
         }
         
         //---- Virtual Methods
-        inline virtual edge_type* getNext() = 0;
+        inline virtual Edge* getNext() = 0;
         
         //---- Operators
-        iterator_type& operator ++(){
+        EdgeIterator& operator ++(){
             this->getNext();
             return *this;
         }
-        iterator_type operator ++(int){
-            iterator_type itt(*this);
-            this->getNext();
-            return itt;
-        }
-        const bool operator ==(const iterator_type& ie)const{
+        const bool operator ==(const EdgeIterator& ie)const{
             return &ie == this;
         }
-        bool operator ==(const iterator_type& ie){
+        bool operator ==(const EdgeIterator& ie){
             return &ie == this;
         }
-        const bool operator !=(const iterator_type& ie)const{
+        const bool operator !=(const EdgeIterator& ie)const{
             return !(operator==(ie));
         }
-        bool operator !=(const iterator_type& ie){
+        bool operator !=(const EdgeIterator& ie){
             return !(operator==(ie));
+        }
+        Edge* operator*()const{
+            return this->next;
         }
         
     protected:
@@ -57,7 +53,7 @@ namespace DCEL {
         /*
          Desactivate constructions for not childs
          */
-        EdgeIterator(edge_type* startEdge = nullptr)
+        EdgeIterator(Edge* startEdge = nullptr)
             : start(startEdge), next(startEdge){
         }
         EdgeIterator(const EdgeIterator& ei)
@@ -65,8 +61,8 @@ namespace DCEL {
         }
         
         //---- Members
-        edge_type* start;
-        edge_type* next;
+        Edge* start;
+        Edge* next;
     };
 }
 

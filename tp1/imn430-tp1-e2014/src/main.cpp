@@ -40,7 +40,7 @@ void drawVoronoiDiagram();
 void drawEdges();
 
 //FIXME: devrait on placer cette variable dans le .h?
-std::set<Site, compareSite> sites;
+std::set<DCEL::Vertex*, DCEL::Vertex::Compare> sites;
 
 int main(int argc, char * argv[])
 {
@@ -82,7 +82,7 @@ void mouseButton( int button, int state, int x, int y )
         
 //        if(pixels[0] != 0.0 || pixels[1] != 0.0 || pixels[2] != 0.0)
         {
-            sites.insert(Site(x, y));
+            sites.insert(new DCEL::Vertex(x,y));
             //return;
         }
 	}
@@ -102,7 +102,6 @@ void display (void)
     glLoadIdentity();
 	
     drawControlPoints();
-    VoronoiDiagram diagram(sites);
     drawVoronoiDiagram();
     drawEdges();
 
@@ -130,7 +129,7 @@ void drawControlPoints()
 
         for(auto iter = sites.begin(); iter != sites.end(); ++iter)
         {
-            glVertex2i(iter->x - windowWidth/2, -iter->y + windowHeight/2);
+            glVertex2i((*iter)->x - windowWidth/2, -(*iter)->y + windowHeight/2);
         }
     
     glEnd();
@@ -140,6 +139,8 @@ void drawControlPoints()
 
 void drawVoronoiDiagram()
 {
+    VoronoiDiagram v;
+    v.fortuneAlgorithm(sites);
     //TODO: a implanter
 }
 

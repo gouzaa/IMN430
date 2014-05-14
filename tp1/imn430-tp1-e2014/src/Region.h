@@ -10,13 +10,23 @@
 #define IMN430_tp1_Region_h
 
 #include "EdgeIterator.h"
+#include <memory>
+    using std::shared_ptr;
+
 
 namespace DCEL {
+    /*
+        Region or face in a DCEL
+     
+        Traversing a Region
+        for a giving edge e
+     
+        start = e
+        while next(e) != start
+            e = next(e)
+     */
     class Region{
     public:
-        //---- Typedefs
-        
-        
         //---- Constructors
         Region(HalfEdge* obound = nullptr) :
             bound(obound){
@@ -24,34 +34,27 @@ namespace DCEL {
         
         //---- Accessors
         inline HalfEdge* getBound() const{
-            return this->bound;
+            return bound;
         }
         
         //---- Mutators
         inline void setBound(HalfEdge* bound){
             assert(bound);
-            
             this->bound = bound;
         }
         
         //---- Iterators
     private:
-        template<class EdgeT>
-        class RegionIterator : public EdgeIterator<Region, EdgeT>{
+        class RegionIterator : public EdgeIterator{
         public:
-            //---- typedefs
-            typedef EdgeIterator<Region, EdgeT> base_iterator;
-            typedef typename base_iterator::edge_type edge_type;
-            typedef typename base_iterator::value_type value_type;
-            
             //---- Constructors
             RegionIterator(const Region* region)
-                : base_iterator(region->getBound()){
+                : EdgeIterator(region->getBound()){
             }
             
             //---- Overriden Methods
-            inline edge_type* getNext(){
-                edge_type* n = this->next;
+            inline Edge* getNext(){
+                Edge* n = this->next;
                 
                 //--- If not the end we go foward
                 if(this->hasNext()){
@@ -67,7 +70,7 @@ namespace DCEL {
             }
         };
     public:
-        typedef RegionIterator<HalfEdge> iterator_type;
+        typedef RegionIterator iterator_type;
         iterator_type begin(){
             return iterator_type(this);
         }

@@ -10,8 +10,19 @@
 #define IMN430_tp1_Vertex_h
 
 #include "EdgeIterator.h"
+#include <memory>
 
 namespace DCEL {
+    /*
+        Traversing a Region from a Vertex
+        
+        Given the edge e
+        Where is origin is v
+     
+        start = e
+        while next(twin(e)) != start
+            e = next(twin(e))
+     */
     class Vertex{
     public:
         //---- Constructors
@@ -31,6 +42,10 @@ namespace DCEL {
         {
         }
         
+        Vertex(const Vertex& v)
+            : edge(v.edge), x(v.x), y(v.y), z(v.z){
+        }
+        
         //---- Accessors
         inline HalfEdge* getEdge()const{
             return this->edge;
@@ -38,25 +53,19 @@ namespace DCEL {
         
         //---- Iterators
     private:
-        template<class EdgeT>
-        class VertexIterator : public EdgeIterator<Vertex, EdgeT>{
+        class VertexIterator : public EdgeIterator{
         public:
-            //---- typedefs
-            typedef EdgeIterator<Vertex, EdgeT> base_iterator;
-            typedef typename base_iterator::edge_type edge_type;
-            typedef typename base_iterator::value_type value_type;
-            
             //---- Constructors
             VertexIterator(const Vertex* vertex)
-                : base_iterator(vertex->getEdge()){
+                : EdgeIterator(vertex->getEdge()){
             }
             
             //---- Overriden Methods
-            inline edge_type* getNext(){
-                edge_type* n = this->next;
+            inline Edge* getNext(){
+                Edge* n = this->next;
                 
                 if(this->hasNext()){
-                    edge_type* twin = this->next->getTwin();
+                    Edge* twin = this->next->getTwin();
                     this->next = twin->getNext();
                 }
                 
@@ -68,12 +77,27 @@ namespace DCEL {
             }
         };
     public:
-        typedef VertexIterator<HalfEdge> iterator_type;
+        typedef VertexIterator iterator_type;
         iterator_type begin(){
             return iterator_type(this);
         }
         iterator_type end(){
             return iterator_type(nullptr);
+        }
+        
+        //---- Operators
+        bool operator < (const Vertex& v){
+            return y < v.y;
+        }
+        const bool operator < (const Vertex& v)const{
+            return y < v.y;
+        }
+        /*
+            Print a Vertex as (x, y, z)
+         */
+        friend std::ostream& operator <<(std::ostream& os, Vertex* v){
+            os << "(" << v->x << ", " << v->y << ", " << v->z << ")";
+            return os;
         }
         
         //---- Members
@@ -82,7 +106,15 @@ namespace DCEL {
         int x;
         int y;
         int z;
+        
+        struct Compare : public std::binary_function<Vertex*, Vertex*, bool>{
+            bool operator()(const Vertex* v1, const Vertex* v2){
+                return *v1 < *v2;
+            }
+        };
     };
+    
+    typedef std::shared_ptr<Vertex> vertex_ptr;
 }
 
 #endif

@@ -13,19 +13,15 @@
 
 #include "utils.h"
 #include "Voronoi.h"
+#include "DCEL.h"
 
 using namespace std;
 using namespace UTILS;
 
 //---------------SiteEvent---------------
 
-VoronoiDiagram::SiteEvent::SiteEvent( UTILS::Site aPoint)
-{
-    mSite = std::shared_ptr<UTILS::Site> (new UTILS::Site(aPoint));
-}
-    
-VoronoiDiagram::SiteEvent::~SiteEvent()
-{
+VoronoiDiagram::SiteEvent::SiteEvent(DCEL::Vertex* pt)
+    : VoronoiDiagram::VoronoiEvent(pt){
 }
     
 bool VoronoiDiagram::SiteEvent::isSiteEvent()
@@ -36,13 +32,8 @@ bool VoronoiDiagram::SiteEvent::isSiteEvent()
 //---------------CircleEvent---------------
 
 //TODO: a implanter quand on sera c'est quoi la leaf
-VoronoiDiagram::CircleEvent::CircleEvent(noeudAVL<Dobacaracol> *aLeaf)
-{
-    mLeaf = aLeaf;
-}
-    
-VoronoiDiagram::CircleEvent::~CircleEvent()
-{
+VoronoiDiagram::CircleEvent::CircleEvent(DCEL::Vertex* pt)
+    : VoronoiDiagram::VoronoiEvent(pt){
 }
     
 bool VoronoiDiagram::CircleEvent::isSiteEvent()
@@ -51,31 +42,55 @@ bool VoronoiDiagram::CircleEvent::isSiteEvent()
 }
 
 //---------------VoronoiDiagram---------------
-VoronoiDiagram::VoronoiDiagram( set<Site, compareSite> site )
-{
-    //Step1
-    for(auto iter = site.begin(); iter != site.end(); iter++)
-    {
-        shared_ptr<SiteEvent> event(new SiteEvent(*iter));
-        mEventQueue.push(event);
-    }
+VoronoiDiagram::VoronoiDiagram()
+    : line(0){
 }
 
-void VoronoiDiagram::fortuneAlgorithm()
+void VoronoiDiagram::fortuneAlgorithm(const std::set<DCEL::Vertex*, DCEL::Vertex::Compare>& sites)
 {
-    //TODO: a implanter de la sorte
-    while(!mEventQueue.empty())
-    {
-        //FIXME la condition est a revoir
-//        if(mEventQueue.back().isSiteEvent())
-//        {
-//            //handleSiteEvent
-//            //qqc genre pop
-//        }
-//        else
-//        {
-//            //handleCircleEvent
-//            //qqc genre pop
-//        }
+    //Step0
+    root.clear();
+    for(auto v = vertices.begin(); v != vertices.end(); ++v){
+        delete *v;
     }
+    vertices.clear();
+    for (auto e = edges.begin(); e != edges.end(); ++e) {
+        delete *e;
+    }
+    edges.clear();
+    
+    //Step1
+    for(auto iter = sites.begin(); iter != sites.end(); iter++){
+        mEventQueue.push(new SiteEvent(*iter));
+    }
+    
+    //Step2
+    VoronoiEvent* event = nullptr;
+    while(!mEventQueue.empty()){
+        event = mEventQueue.top();
+        mEventQueue.pop();
+        
+        //Update fortune's line
+        line = event->point->y;
+        
+        //Handle event
+        if(event->isSiteEvent()){
+//            insert(event->point);
+        }
+        else{
+//            remove(event);
+        }
+        
+        delete event;
+    }
+    
+    //return edges;
 }
+
+
+
+
+
+
+
+

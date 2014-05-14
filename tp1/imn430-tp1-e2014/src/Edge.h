@@ -12,20 +12,20 @@
 #include <cassert>
 
 namespace DCEL {
-    /*
-     Edges are oriented counterclockwise inside each region
-     Because an edge may border two regions an edge is replace by two half edge
-     */
-    
-    
     //---- Foward Declaration
     class Region;
     class Vertex;
     
-    
+    /*
+        Edges are oriented counterclockwise inside each region
+        Because an edge may border two regions an edge is replace by two half edge
+     */
     class Edge{
     public:
         //---- Constructors
+        Edge(Vertex* v)
+            : prev(nullptr), next(nullptr), twin(nullptr), origin(v), left(nullptr){
+        }
         Edge(Edge* oprev = nullptr, Edge* onext = nullptr)
             : prev(oprev), next(onext), twin(nullptr), origin(nullptr), left(nullptr){
         }
@@ -66,7 +66,7 @@ namespace DCEL {
             this->prev = prev;
             prev->next = this;
         }
-        inline void setTail(Vertex* origin){
+        inline void setOrigin(Vertex* origin){
             assert(origin);
             
             this->origin = origin;
