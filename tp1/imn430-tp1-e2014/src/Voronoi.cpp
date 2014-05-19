@@ -14,6 +14,7 @@
 #include "utils.h"
 #include "Voronoi.h"
 #include "DCEL.h"
+#include <cmath>
 
 using namespace std;
 using namespace UTILS;
@@ -43,13 +44,15 @@ bool VoronoiDiagram::CircleEvent::isSiteEvent()
 
 //---------------VoronoiDiagram---------------
 VoronoiDiagram::VoronoiDiagram()
-    : line(0){
+    : line(0), root(nullptr){
 }
 
 void VoronoiDiagram::fortuneAlgorithm(const std::set<DCEL::Vertex*, DCEL::Vertex::Compare>& sites)
 {
     //Step0
-    root.clear();
+    if(root){//TODO FAIRE UNE DESTRUCTEUR
+        delete root;
+    }
     for(auto v = vertices.begin(); v != vertices.end(); ++v){
         delete *v;
     }
@@ -58,6 +61,10 @@ void VoronoiDiagram::fortuneAlgorithm(const std::set<DCEL::Vertex*, DCEL::Vertex
         delete *e;
     }
     edges.clear();
+    for(auto p = points.begin(); p != points.end(); ++p){
+        delete  *p;
+    }
+    points.clear();
     
     //Step1
     for(auto iter = sites.begin(); iter != sites.end(); iter++){
@@ -75,7 +82,7 @@ void VoronoiDiagram::fortuneAlgorithm(const std::set<DCEL::Vertex*, DCEL::Vertex
         
         //Handle event
         if(event->isSiteEvent()){
-            insert(event->point);
+            insert(event->point);//HandleSite and STUFF
         }
         else{
            remove(event);
@@ -87,13 +94,68 @@ void VoronoiDiagram::fortuneAlgorithm(const std::set<DCEL::Vertex*, DCEL::Vertex
     //return edges;
 }
 
+double VoronoiDiagram::getIntersection(VoronoiDiagram::tree_type* par, const double y)const{
+    VoronoiDiagram::tree_type* left = VParabola::GetLeftChild(par);
+    VoronoiDiagram::tree_type* right= VParabola::GetRightChild(par);
+ 
+    DCEL::Vertex* p = left->site;
+    DCEL::Vertex* r = right->site;
+ 
+    //Get parabola distance
+    double dp = 2.0 * (p->y - y);
+    const double a1 = 1.0 / dp;
+    const double b1 = -2.0 * p->x / dp;
+    const double c1 = y + dp / 4 + p->x * p->x / dp;
+ 
+    //Get parabola distance
+    dp = 2.0 * (r->y - y);
+    const double a2 = 1.0 / dp;
+    const double b2 = -2.0 * r->x/dp;
+    const double c2 = y + dp / 4 + r->x * r->x / dp;
+ 
+    //Compare Equation
+    const double a = a1 - a2;
+    const double b = b1 - b2;
+    const double c = c1 - c2;
+ 
+    //Compute discriminant
+    const double disc = b*b - 4 * a * c;
+    const double _2_A = 2*a;
+    const double sqrt_disct = std::sqrt(disc);
+    
+    //Get point value
+    const double x1 = (-b + sqrt_disct) / _2_A;
+    const double x2 = (-b - sqrt_disct) / _2_A;
+ 
+    //Getthe closest
+    return ((p->y < r->y) ? std::max(x1, x2) : std::min(x1, x2));
+}
+
+VoronoiDiagram::tree_type* VoronoiDiagram::getLeftLeaf(const double site_x)const{
+    tree_type* par = root;
+    double x = 0.0;
+    
+    while(!par->isLeaf){
+        x = getIntersection(par, line);
+        par = ((x > site_x) ? par->left : par->right);
+    }
+    return par;
+}
+
 void VoronoiDiagram::insert(DCEL::Vertex* point){
-    if(root.empty()){
-        root.insert(point);
+    if(!root){
+        root = new tree_type(point);
         return;
     }
     
-    //Determiner si root est une leaf...
+    if(root->isLeaf){//TODO
+        root->isLeaf = false;
+        root->left = new tree_type(root->site);
+        root->right = new tree_type(point);
+    }
+    
+    //Get left arc
+    getLeftLeaf();
 }
 
 void VoronoiDiagram::remove(VoronoiDiagram::VoronoiEvent* event){

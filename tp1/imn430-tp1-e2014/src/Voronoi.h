@@ -12,13 +12,14 @@
 #include <set>
 #include <queue>
 
-#include "abr.h"
 #include "utils.h"
 #include "DCEL.h"
+#include "Tree.h"
+
+using std::vector;
 
 class VoronoiDiagram
 {
-public:
 private:
     //////////Private classes +
     class VoronoiEvent
@@ -64,11 +65,16 @@ private:
     //////////Private classes -
     
 public:
+    typedef TreeNode<DCEL::Edge, DCEL::Vertex, VoronoiEvent> tree_type;
     VoronoiDiagram();
     
     void fortuneAlgorithm(const std::set<DCEL::Vertex*, DCEL::Vertex::Compare>& sites);
     
 private:
+    tree_type* getLeftLeaf(const double site_x)const;
+    double getIntersection(tree_type* par, const double y)const;
+    
+    
     //---- Event handlers
     void insert(DCEL::Vertex* point);
     void remove(VoronoiDiagram::VoronoiEvent* event);
@@ -78,6 +84,7 @@ private:
     double line;
     vector<DCEL::Vertex*> vertices;
     vector<DCEL::Edge*> edges;
-    abr<DCEL::Vertex*> root;//Parabolassss
+    tree_type* root;//Parabolassss
+    vector<DCEL::Vertex*> points;
 };
 #endif /* defined(__IMN430_TP1__Voronoi__) */

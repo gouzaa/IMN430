@@ -95,10 +95,11 @@ namespace DCEL {
         /*
             Print a Vertex as (x, y, z)
          */
-        friend std::ostream& operator <<(std::ostream& os, Vertex* v){
-            os << "(" << v->x << ", " << v->y << ", " << v->z << ")";
+        /*friend std::ostream& operator <<(std::ostream& os, const Vertex& v){
+            os << "(";
+            os << v.x << ", " << v.y << ", " << v.z << ")";
             return os;
-        }
+        }*/
         
         //---- Members
         HalfEdge* edge;
