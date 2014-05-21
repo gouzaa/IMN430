@@ -16,39 +16,36 @@
 #include "DCEL.h"
 #include <cmath>
 
-using namespace std;
 using namespace UTILS;
 
 //---------------SiteEvent---------------
-
 VoronoiDiagram::SiteEvent::SiteEvent(DCEL::Vertex* pt)
     : VoronoiDiagram::VoronoiEvent(pt){
 }
-    
-bool VoronoiDiagram::SiteEvent::isSiteEvent()
-{
+bool VoronoiDiagram::SiteEvent::isSiteEvent()const{
     return true;
 }
 
 //---------------CircleEvent---------------
-
-//TODO: a implanter quand on sera c'est quoi la leaf
 VoronoiDiagram::CircleEvent::CircleEvent(DCEL::Vertex* pt)
     : VoronoiDiagram::VoronoiEvent(pt){
 }
-    
-bool VoronoiDiagram::CircleEvent::isSiteEvent()
-{
+bool VoronoiDiagram::CircleEvent::isSiteEvent()const{
     return false;
+}
+bool VoronoiDiagram::CircleEvent::isValid()const{
+    return valid;
+}
+void VoronoiDiagram::CircleEvent::setValid(const bool isValid){
+    valid = isValid;
 }
 
 //---------------VoronoiDiagram---------------
-VoronoiDiagram::VoronoiDiagram()
-    : line(0), root(nullptr){
-}
-
-void VoronoiDiagram::fortuneAlgorithm(const std::set<DCEL::Vertex*, DCEL::Vertex::Compare>& sites)
-{
+void VoronoiDiagram::fortuneAlgorithm(const std::set<DCEL::Vertex*, DCEL::Vertex::Compare>& sites){
+    if(sites.empty()){
+        return;
+    }
+    
     //Step0
     if(root){//TODO FAIRE UNE DESTRUCTEUR
         delete root;
@@ -57,14 +54,7 @@ void VoronoiDiagram::fortuneAlgorithm(const std::set<DCEL::Vertex*, DCEL::Vertex
         delete *v;
     }
     vertices.clear();
-    for (auto e = edges.begin(); e != edges.end(); ++e) {
-        delete *e;
-    }
-    edges.clear();
-    for(auto p = points.begin(); p != points.end(); ++p){
-        delete  *p;
-    }
-    points.clear();
+    std::vector<DCEL::Edge> edges;
     
     //Step1
     for(auto iter = sites.begin(); iter != sites.end(); iter++){
@@ -82,20 +72,23 @@ void VoronoiDiagram::fortuneAlgorithm(const std::set<DCEL::Vertex*, DCEL::Vertex
         
         //Handle event
         if(event->isSiteEvent()){
-            insert(event->point);//HandleSite and STUFF
+            handleSiteEvent(event->point);
         }
         else{
-           remove(event);
+           handleCircleEvent(reinterpret_cast<CircleEvent*>(event));
         }
         
         delete event;
     }
     
+    //Step3
+    //finishEdge();
+    
     //return edges;
 }
 
 double VoronoiDiagram::getIntersection(VoronoiDiagram::tree_type* par, const double y)const{
-    VoronoiDiagram::tree_type* left = VParabola::GetLeftChild(par);
+    /*VoronoiDiagram::tree_type* left = VParabola::GetLeftChild(par);
     VoronoiDiagram::tree_type* right= VParabola::GetRightChild(par);
  
     DCEL::Vertex* p = left->site;
@@ -128,7 +121,8 @@ double VoronoiDiagram::getIntersection(VoronoiDiagram::tree_type* par, const dou
     const double x2 = (-b - sqrt_disct) / _2_A;
  
     //Getthe closest
-    return ((p->y < r->y) ? std::max(x1, x2) : std::min(x1, x2));
+    return ((p->y < r->y) ? std::max(x1, x2) : std::min(x1, x2));*/
+    return 0;
 }
 
 VoronoiDiagram::tree_type* VoronoiDiagram::getLeftLeaf(const double site_x)const{
@@ -142,24 +136,88 @@ VoronoiDiagram::tree_type* VoronoiDiagram::getLeftLeaf(const double site_x)const
     return par;
 }
 
-void VoronoiDiagram::insert(DCEL::Vertex* point){
+void VoronoiDiagram::handleSiteEvent(DCEL::Vertex* site){
     if(!root){
-        root = new tree_type(point);
+        root = new tree_type(site);
         return;
     }
+    
+    //a) Find position in tree for event
+    
+    //b) If the arc of this site is an circle event in the queue remove that event(false alarm)
+    
+    //c) Remove leaf that site event
+    
     
     if(root->isLeaf){//TODO
         root->isLeaf = false;
         root->left = new tree_type(root->site);
-        root->right = new tree_type(point);
+        root->right = new tree_type(site);
     }
     
     //Get left arc
-    getLeftLeaf();
+    //getLeftLeaf();
 }
 
-void VoronoiDiagram::remove(VoronoiDiagram::VoronoiEvent* event){
+void VoronoiDiagram::handleCircleEvent(VoronoiDiagram::CircleEvent* event){
+    assert(event->node);
     
+    if(event->isValid()){
+        assert(event->point);
+        DCEL::Vertex* pt = event->point;
+        
+        //Start a new segment
+        DCEL::Edge* segment = new DCEL::Edge();
+        
+        //Get arcs from the beachline
+        tree_type* node = event->node;
+        tree_type* left = node->getLeft();
+        tree_type* right = node->getRight();
+        
+        //Remove node from the beachline
+        if(left){
+            left->setRight(right);
+            checkCircle(left, pt);
+        }
+        if(right){
+            right->setLeft(left);
+            checkCircle(left, pt);
+        }
+    }
+}
+
+void VoronoiDiagram::checkCircle(tree_type* node, DCEL::Vertex* point){
+    assert(node && point);
+    
+    CircleEvent* event = node->event;
+    tree_type* left = node->getLeft();
+    tree_type* right = node->getRight();
+    
+    if(event && point != event->point){
+        event->setValid(false);
+    }
+    event = nullptr;
+    
+    if(left && right){
+        double y;
+        DCEL::Vertex* intersection = circle(
+            left->site,
+            node->site,
+            right->site,
+            &y
+        );
+        
+        if(intersection){
+            //node->event = new CircleEvent();
+        }
+    }
+}
+
+DCEL::Vertex* VoronoiDiagram::circle(DCEL::Vertex* left, DCEL::Vertex* midlle, DCEL::Vertex* right, double* y_inter){
+    
+    //if(){}
+    
+    return nullptr;
 }
 
 

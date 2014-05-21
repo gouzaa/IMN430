@@ -19,18 +19,34 @@ public:
         : isLeaf(true), site(pt), parent(nullptr), edge(nullptr), event(nullptr){
     }
     
-    //---- Public Methods
+    //---- Accessors
     TreeNode* getLeft()const{
         return left;
     }
-    TreeNode* getright()const{
+    TreeNode* getRight()const{
         return right;
+    }
+    
+    //---- Predicates
+    bool isValidEvent()const{
+        return event->valid;
+    }
+    
+    //---- Mutators
+    void setLeft(TreeNode* oleft){
+        left = oleft;
+    }
+    void setRight(TreeNode* oright){
+        right = oright;
+    }
+    void setIsValid(const bool isValid){
+        event->valid = isValid;
     }
     
     //---- Members
     bool      isLeaf;
 	PoinT*	  site;
-	EdgeT*	  edge;
+	EdgeT*	  edge;//TODO should we really put that here ????
 	EventT*	  event;
 	TreeNode* parent;
     

@@ -3,7 +3,6 @@
 //  IMN430_tp1
 //
 //  Created by Steven Aubertin on 2014-05-13.
-//  Copyright (c) 2014 Steven Aubertin. All rights reserved.
 //
 
 #ifndef IMN430_tp1_Vertex_h
@@ -11,6 +10,7 @@
 
 #include "EdgeIterator.h"
 #include <memory>
+#include <cmath>
 
 namespace DCEL {
     /*
@@ -83,6 +83,19 @@ namespace DCEL {
         }
         iterator_type end(){
             return iterator_type(nullptr);
+        }
+        
+        //Compute distance between two Vertex (Eucledian distance)
+        static double dist(const Vertex& v1, const Vertex& v2){
+            const double dx = v1.x - v2.x;
+            const double dy = v1.y - v2.y;
+            return sqrt((dx * dx) + (dy * dy));
+        }
+        static double dist(const Vertex* v1, const Vertex* v2){
+            return dist(*v1, *v2);
+        }
+        double dist(const Vertex& v)const{
+            return dist(*this, v);
         }
         
         //---- Operators

@@ -84,8 +84,6 @@ namespace DCEL {
         
         //TODO: If we need to add hole to a region it will be here
         //std::List<HalfEdge*> holes; ou quelque chose comme ca
-        
-        //friend class EdgeIterator<HalfEdge*>;
     };
 }
 
