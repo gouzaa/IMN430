@@ -11,8 +11,8 @@
 
 #include <set>
 #include <queue>
+#include <vector>
 
-#include "abr.h"
 #include "utils.h"
 #include "DCEL.h"
 
@@ -76,8 +76,8 @@ private:
     //---- Members
     std::priority_queue<VoronoiEvent*> mEventQueue;//Handle events base on it's y coord
     double line;
-    vector<DCEL::Vertex*> vertices;
-    vector<DCEL::Edge*> edges;
+    std::vector<DCEL::Vertex*> vertices;
+    std::vector<DCEL::Edge*> edges;
     abr<DCEL::Vertex*> root;//Parabolassss
 };
 #endif /* defined(__IMN430_TP1__Voronoi__) */
