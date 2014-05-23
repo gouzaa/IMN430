@@ -47,7 +47,7 @@ void VoronoiDiagram::fortuneAlgorithm(const std::set<DCEL::Vertex*, DCEL::Vertex
     }
     
     //Step0
-    if(root){//TODO FAIRE UNE DESTRUCTEUR
+    if(root){//TODO: FAIRE UNE DESTRUCTEUR
         delete root;
     }
     for(auto v = vertices.begin(); v != vertices.end(); ++v){
@@ -149,7 +149,7 @@ void VoronoiDiagram::handleSiteEvent(DCEL::Vertex* site){
     //c) Remove leaf that site event
     
     
-    if(root->isLeaf){//TODO
+    if(root->isLeaf){//TODO:
         root->isLeaf = false;
         root->left = new tree_type(root->site);
         root->right = new tree_type(site);

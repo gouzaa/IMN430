@@ -46,11 +46,11 @@ public:
     //---- Members
     bool      isLeaf;
 	PoinT*	  site;
-	EdgeT*	  edge;//TODO should we really put that here ????
+	EdgeT*	  edge;//TODO: should we really put that here ????
 	EventT*	  event;
 	TreeNode* parent;
     
-    //TODO private ?
+    //TODO: private ?
     TreeNode* left;
     TreeNode* right;
 };
