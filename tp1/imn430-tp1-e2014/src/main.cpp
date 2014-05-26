@@ -20,13 +20,10 @@
 #include <time.h>
 #include <set>
 
-#include "utils.h"
 #include "DCEL.h"
 #include "Voronoi.h"
 
 #define GLUT_DISABLE_ATEXIT_HACK
-
-using namespace UTILS;
 
 GLint windowWidth = 500;
 GLint windowHeight = 500;
@@ -38,6 +35,7 @@ void mouseButton(int button, int state, int x, int y);
 void drawControlPoints();
 void drawVoronoiDiagram();
 void drawEdges();
+VoronoiDiagram diagram;
 
 //FIXME: devrait on placer cette variable dans le .h?
 std::set<DCEL::Vertex*, DCEL::Vertex::Compare> sites;
@@ -78,11 +76,14 @@ void mouseButton( int button, int state, int x, int y )
 	if(state == GLUT_DOWN)
 	{
         GLfloat pixels[3];
-        glReadPixels(x, windowHeight - y, 1, 1, GL_RGB, GL_FLOAT, &pixels);
+        glReadPixels(x, y, 1, 1, GL_RGB, GL_FLOAT, &pixels);
+//        glReadPixels(x, windowHeight - y, 1, 1, GL_RGB, GL_FLOAT, &pixels);
         
 //        if(pixels[0] != 0.0 || pixels[1] != 0.0 || pixels[2] != 0.0)
         {
             sites.insert(new DCEL::Vertex(x,y));
+            diagram.addSite(DCEL::Vertex(x - windowWidth/2,-y + windowHeight/2));
+            diagram.fortuneAlgorithm();
             //return;
         }
 	}
@@ -139,8 +140,6 @@ void drawControlPoints()
 
 void drawVoronoiDiagram()
 {
-    VoronoiDiagram v;
-    v.fortuneAlgorithm(sites);
     //TODO: a implanter
 }
 

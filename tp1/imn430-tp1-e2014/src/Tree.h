@@ -13,46 +13,34 @@ class TreeNode{
 public:
     //----Consrtructors
     TreeNode()
-        : isLeaf(false), site(nullptr), parent(nullptr), edge(nullptr), event(nullptr){
+        : site(nullptr), edge(nullptr), event(nullptr){
     }
     TreeNode(PoinT* pt)
-        : isLeaf(true), site(pt), parent(nullptr), edge(nullptr), event(nullptr){
+        : site(pt), edge(nullptr), event(nullptr){
     }
     
     //---- Accessors
-    TreeNode* getLeft()const{
-        return left;
+    double X()const{
+        return site->x;
     }
-    TreeNode* getRight()const{
-        return right;
+    double Y()const{
+        return site->y;
     }
-    
-    //---- Predicates
-    bool isValidEvent()const{
-        return event->valid;
+    double Z()const{
+        return site->z;
     }
     
-    //---- Mutators
-    void setLeft(TreeNode* oleft){
-        left = oleft;
-    }
-    void setRight(TreeNode* oright){
-        right = oright;
-    }
-    void setIsValid(const bool isValid){
-        event->valid = isValid;
-    }
-    
+    void setEvent (EventT* e) { this->event = e;};
     //---- Members
-    bool      isLeaf;
 	PoinT*	  site;
 	EdgeT*	  edge;//TODO: should we really put that here ????
 	EventT*	  event;
-	TreeNode* parent;
     
-    //TODO: private ?
-    TreeNode* left;
-    TreeNode* right;
+    struct Compare : public std::binary_function<TreeNode, TreeNode, bool>{
+        bool operator()(const TreeNode v1, const TreeNode v2){
+            return v1.site->x < v2.site->x;
+        }
+    };
 };
 
 #endif
