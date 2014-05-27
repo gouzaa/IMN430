@@ -9,17 +9,19 @@
 #ifdef __APPLE__
     #include <GLUT/glut.h>
 #else
+	#include <GL/glut.h>
+	#include <GL/glu.h>
     #include <GL/gl.h>
-    #include <GL/glu.h>
-    #include <GL/glut.h>
 #endif
 
 #include <iostream>
 #include <math.h>
 #include <algorithm>
 #include <time.h>
+#include <set>
 
 #include "DCEL.h"
+#include "Voronoi.h"
 
 #define GLUT_DISABLE_ATEXIT_HACK
 
@@ -33,6 +35,10 @@ void mouseButton(int button, int state, int x, int y);
 void drawControlPoints();
 void drawVoronoiDiagram();
 void drawEdges();
+VoronoiDiagram diagram;
+
+//FIXME: devrait on placer cette variable dans le .h?
+std::set<DCEL::Vertex*, DCEL::Vertex::Compare> sites;
 
 int main(int argc, char * argv[])
 {
@@ -70,11 +76,15 @@ void mouseButton( int button, int state, int x, int y )
 	if(state == GLUT_DOWN)
 	{
         GLfloat pixels[3];
-        glReadPixels(x, windowHeight - y, 1, 1, GL_RGB, GL_FLOAT, &pixels);
+        glReadPixels(x, y, 1, 1, GL_RGB, GL_FLOAT, &pixels);
+//        glReadPixels(x, windowHeight - y, 1, 1, GL_RGB, GL_FLOAT, &pixels);
         
-        if(pixels[0] != 0.0 || pixels[1] != 0.0 || pixels[2] != 0.0)
+//        if(pixels[0] != 0.0 || pixels[1] != 0.0 || pixels[2] != 0.0)
         {
-            return;
+            sites.insert(new DCEL::Vertex(x,y));
+            diagram.addSite(DCEL::Vertex(x - windowWidth/2,-y + windowHeight/2));
+            diagram.fortuneAlgorithm();
+            //return;
         }
 	}
 	glutPostRedisplay();
@@ -92,6 +102,10 @@ void display (void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 	
+    drawControlPoints();
+    drawVoronoiDiagram();
+    drawEdges();
+
     glFlush();
 	glutSwapBuffers();
 }
@@ -102,4 +116,34 @@ void reshape (int m_width, int m_height)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
+}
+
+void drawControlPoints()
+{
+    glPushMatrix();
+    glLoadIdentity();
+    
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glPointSize(5);
+    
+    glBegin(GL_POINTS);
+
+        for(auto iter = sites.begin(); iter != sites.end(); ++iter)
+        {
+            glVertex2i((*iter)->x - windowWidth/2, -(*iter)->y + windowHeight/2);
+        }
+    
+    glEnd();
+    
+    glPopMatrix();
+}
+
+void drawVoronoiDiagram()
+{
+    //TODO: a implanter
+}
+
+void drawEdges()
+{
+    //TODO: a implanter
 }
